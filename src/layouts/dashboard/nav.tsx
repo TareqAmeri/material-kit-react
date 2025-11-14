@@ -4,18 +4,19 @@ import { useEffect } from 'react';
 import { varAlpha } from 'minimal-shared/utils';
 
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import ListItem from '@mui/material/ListItem';
 import { useTheme } from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
 import Drawer, { drawerClasses } from '@mui/material/Drawer';
 
-import { usePathname } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
+import { useRouter, usePathname } from 'src/routes/hooks';
 
 import { Logo } from 'src/components/logo';
+import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 
-import { NavUpgrade } from '../components/nav-upgrade';
 import { WorkspacesPopover } from '../components/workspaces-popover';
 
 import type { NavItem } from '../nav-config-dashboard';
@@ -108,7 +109,13 @@ export function NavMobile({
 // ----------------------------------------------------------------------
 
 export function NavContent({ data, slots, workspaces, sx }: NavContentProps) {
+  const router = useRouter();
   const pathname = usePathname();
+
+  const handleLogout = () => {
+    // Navigate to sign-in page
+    router.push('/sign-in');
+  };
 
   return (
     <>
@@ -188,7 +195,19 @@ export function NavContent({ data, slots, workspaces, sx }: NavContentProps) {
 
       {slots?.bottomArea}
 
-      <NavUpgrade />
+      {/* Logout Button */}
+      <Box sx={{ px: 2.5, pb: 2, pt: 1 }}>
+        <Button
+          fullWidth
+          color="error"
+          size="large"
+          variant="outlined"
+          onClick={handleLogout}
+          startIcon={<Iconify icon={'solar:logout-2-bold-duotone' as any} width={24} />}
+        >
+          Logout
+        </Button>
+      </Box>
     </>
   );
 }

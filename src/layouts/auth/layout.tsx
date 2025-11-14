@@ -135,14 +135,24 @@ export function AuthLayout({
 // ----------------------------------------------------------------------
 
 const backgroundStyles = (): CSSObject => ({
-  zIndex: 1,
-  opacity: 0.24,
+  zIndex: -1,
   width: '100%',
   height: '100%',
   content: "''",
   position: 'absolute',
-  backgroundSize: 'cover',
-  backgroundRepeat: 'no-repeat',
-  backgroundPosition: 'center center',
-  backgroundImage: 'url(/assets/background/overlay.jpg)',
+  // Dark Premium Theme Gradient Background
+  background: 'linear-gradient(135deg, #0f2027 0%, #1e3c72 50%, #2a5298 100%)',
+  backgroundSize: '400% 400%',
+  animation: 'gradientShift 15s ease infinite',
+  '@keyframes gradientShift': {
+    '0%': {
+      backgroundPosition: '0% 50%',
+    },
+    '50%': {
+      backgroundPosition: '100% 50%',
+    },
+    '100%': {
+      backgroundPosition: '0% 50%',
+    },
+  },
 });

@@ -12,11 +12,24 @@ import { DashboardLayout } from 'src/layouts/dashboard';
 
 // ----------------------------------------------------------------------
 
-export const DashboardPage = lazy(() => import('src/pages/dashboard'));
-export const BlogPage = lazy(() => import('src/pages/blog'));
-export const UserPage = lazy(() => import('src/pages/user'));
+// AUTHENTICATION
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
-export const ProductsPage = lazy(() => import('src/pages/products'));
+
+// DASHBOARD & MAIN PAGES
+export const DashboardPage = lazy(() => import('src/pages/dashboard'));
+export const ProjectsPage = lazy(() => import('src/pages/projects'));
+export const TasksPage = lazy(() => import('src/pages/tasks'));
+export const TimesheetPage = lazy(() => import('src/pages/timesheet'));
+export const CalendarPage = lazy(() => import('src/pages/calendar'));
+export const TeamPage = lazy(() => import('src/pages/team'));
+export const ChatPage = lazy(() => import('src/pages/chat'));
+export const FilesPage = lazy(() => import('src/pages/files'));
+export const ReportsPage = lazy(() => import('src/pages/reports'));
+export const RisksPage = lazy(() => import('src/pages/risks'));
+export const IssuesPage = lazy(() => import('src/pages/issues'));
+export const SettingsPage = lazy(() => import('src/pages/settings'));
+
+// ERROR PAGES
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
 const renderFallback = () => (
@@ -41,6 +54,7 @@ const renderFallback = () => (
 
 export const routesSection: RouteObject[] = [
   {
+    // MAIN APP LAYOUT with sidebar navigation
     element: (
       <DashboardLayout>
         <Suspense fallback={renderFallback()}>
@@ -49,13 +63,24 @@ export const routesSection: RouteObject[] = [
       </DashboardLayout>
     ),
     children: [
-      { index: true, element: <DashboardPage /> },
-      { path: 'user', element: <UserPage /> },
-      { path: 'products', element: <ProductsPage /> },
-      { path: 'blog', element: <BlogPage /> },
+      // Default route redirects to dashboard
+      { path: '/', element: <DashboardPage /> },
+      { path: 'dashboard', element: <DashboardPage /> },
+      { path: 'projects', element: <ProjectsPage /> },
+      { path: 'tasks', element: <TasksPage /> },
+      { path: 'timesheet', element: <TimesheetPage /> },
+      { path: 'calendar', element: <CalendarPage /> },
+      { path: 'team', element: <TeamPage /> },
+      { path: 'chat', element: <ChatPage /> },
+      { path: 'files', element: <FilesPage /> },
+      { path: 'reports', element: <ReportsPage /> },
+      { path: 'risks', element: <RisksPage /> },
+      { path: 'issues', element: <IssuesPage /> },
+      { path: 'settings', element: <SettingsPage /> },
     ],
   },
   {
+    // AUTHENTICATION LAYOUT (centered, no sidebar)
     path: 'sign-in',
     element: (
       <AuthLayout>
@@ -64,6 +89,7 @@ export const routesSection: RouteObject[] = [
     ),
   },
   {
+    // ERROR PAGES
     path: '404',
     element: <Page404 />,
   },
