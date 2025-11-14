@@ -12,40 +12,71 @@ export type NavItem = {
   info?: React.ReactNode;
 };
 
+// PROJECT MANAGEMENT NAVIGATION - Complete menu for PM system
 export const navData = [
   {
     title: 'Dashboard',
-    path: '/',
+    path: '/dashboard',
     icon: icon('ic-analytics'),
   },
   {
-    title: 'User',
-    path: '/user',
+    title: 'Projects',
+    path: '/projects',
+    icon: icon('ic-folder'),
+  },
+  {
+    title: 'Tasks',
+    path: '/tasks',
+    icon: icon('ic-kanban'),
+  },
+  {
+    title: 'Timesheet',
+    path: '/timesheet',
+    icon: icon('ic-invoice'),
+  },
+  {
+    title: 'Calendar',
+    path: '/calendar',
+    icon: icon('ic-calendar'),
+  },
+  {
+    title: 'Team',
+    path: '/team',
     icon: icon('ic-user'),
   },
   {
-    title: 'Product',
-    path: '/products',
-    icon: icon('ic-cart'),
+    title: 'Chat',
+    path: '/chat',
+    icon: icon('ic-chat'),
     info: (
-      <Label color="error" variant="inverted">
-        +3
+      <Label color="info" variant="inverted">
+        Soon
       </Label>
     ),
   },
   {
-    title: 'Blog',
-    path: '/blog',
-    icon: icon('ic-blog'),
+    title: 'Files',
+    path: '/files',
+    icon: icon('ic-file'),
   },
   {
-    title: 'Sign in',
-    path: '/sign-in',
-    icon: icon('ic-lock'),
+    title: 'Reports',
+    path: '/reports',
+    icon: icon('ic-external'),
   },
   {
-    title: 'Not found',
-    path: '/404',
+    title: 'Risks',
+    path: '/risks',
+    icon: icon('ic-label'),
+  },
+  {
+    title: 'Issues',
+    path: '/issues',
     icon: icon('ic-disabled'),
+  },
+  {
+    title: 'Settings',
+    path: '/settings',
+    icon: icon('ic-lock'),
   },
 ];

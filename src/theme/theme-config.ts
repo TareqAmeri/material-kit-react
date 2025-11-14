@@ -37,12 +37,13 @@ export const themeConfig: ThemeConfig = {
    * Palette
    *************************************** */
   palette: {
+    // DARK PREMIUM THEME (Option E) - Deep blue gradient
     primary: {
-      lighter: '#D0ECFE',
-      light: '#73BAFB',
-      main: '#1877F2',
-      dark: '#0C44AE',
-      darker: '#042174',
+      lighter: '#7899d4', // Lighter shade of our blue
+      light: '#2a5298',   // Main gradient end color
+      main: '#1e3c72',    // Main gradient start color (primary brand)
+      dark: '#15305a',    // Darker variation
+      darker: '#0f2027',  // Darkest variation (gradient bottom)
       contrastText: '#FFFFFF',
     },
     secondary: {
@@ -62,27 +63,27 @@ export const themeConfig: ThemeConfig = {
       contrastText: '#FFFFFF',
     },
     success: {
-      lighter: '#D3FCD2',
-      light: '#77ED8B',
-      main: '#22C55E',
-      dark: '#118D57',
-      darker: '#065E49',
+      lighter: '#c6f6d5', // Lighter green
+      light: '#68d391',   // Light green
+      main: '#10b981',    // Emerald green (matches our previous design)
+      dark: '#059669',    // Dark green
+      darker: '#047857',  // Darker green
       contrastText: '#ffffff',
     },
     warning: {
-      lighter: '#FFF5CC',
-      light: '#FFD666',
-      main: '#FFAB00',
-      dark: '#B76E00',
-      darker: '#7A4100',
-      contrastText: '#1C252E',
+      lighter: '#fed7aa', // Lighter orange
+      light: '#fbbf24',   // Light orange
+      main: '#f59e0b',    // Amber/Orange (matches our previous design)
+      dark: '#d97706',    // Dark orange
+      darker: '#b45309',  // Darker orange
+      contrastText: '#ffffff',
     },
     error: {
-      lighter: '#FFE9D5',
-      light: '#FFAC82',
-      main: '#FF5630',
-      dark: '#B71D18',
-      darker: '#7A0916',
+      lighter: '#fecaca', // Lighter red
+      light: '#f87171',   // Light red
+      main: '#ef4444',    // Red (matches our previous design)
+      dark: '#dc2626',    // Dark red
+      darker: '#b91c1c',  // Darker red
       contrastText: '#FFFFFF',
     },
     grey: {
