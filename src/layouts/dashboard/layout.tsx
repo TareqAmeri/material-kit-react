@@ -1,11 +1,13 @@
 import type { Breakpoint } from '@mui/material/styles';
 
 import { merge } from 'es-toolkit';
+import { useState, useEffect } from 'react';
 import { useBoolean } from 'minimal-shared/hooks';
 
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 
 import { _langs, _notifications } from 'src/_mock';
 
@@ -20,7 +22,7 @@ import { _workspaces } from '../nav-config-workspace';
 import { MenuButton } from '../components/menu-button';
 import { HeaderSection } from '../core/header-section';
 import { LayoutSection } from '../core/layout-section';
-import { ThemeToggle } from '../components/theme-toggle';
+import { ThemeControls } from '../components/theme-controls';
 import { AccountPopover } from '../components/account-popover';
 import { LanguagePopover } from '../components/language-popover';
 import { NotificationsPopover } from '../components/notifications-popover';
@@ -51,6 +53,23 @@ export function DashboardLayout({
   const theme = useTheme();
 
   const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();
+  
+  const [systemName, setSystemName] = useState<string>('Data Management Office');
+  const [logoUrl, setLogoUrl] = useState<string>('');
+
+  useEffect(() => {
+    const loadBranding = () => {
+      const savedName = localStorage.getItem('dmo-system-name');
+      if (savedName) setSystemName(savedName);
+      
+      const savedLogo = localStorage.getItem('dmo-system-logo');
+      if (savedLogo) setLogoUrl(savedLogo);
+    };
+
+    loadBranding();
+    window.addEventListener('branding-updated', loadBranding);
+    return () => window.removeEventListener('branding-updated', loadBranding);
+  }, []);
 
   const renderHeader = () => {
     const headerSlotProps: HeaderSectionProps['slotProps'] = {
@@ -73,6 +92,33 @@ export function DashboardLayout({
             sx={{ mr: 1, ml: -1, [theme.breakpoints.up(layoutQuery)]: { display: 'none' } }}
           />
           <NavMobile data={navData} open={open} onClose={onClose} workspaces={_workspaces} />
+          
+          {/** @slot Logo and System Name */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, ml: { xs: 0, lg: 2 } }}>
+            {logoUrl && (
+              <Box
+                component="img"
+                src={logoUrl}
+                alt="System logo"
+                sx={{
+                  maxHeight: 40,
+                  width: 'auto',
+                  objectFit: 'contain',
+                  display: { xs: 'none', md: 'block' },
+                }}
+              />
+            )}
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 600,
+                display: { xs: 'none', md: 'block' },
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {systemName}
+            </Typography>
+          </Box>
         </>
       ),
       rightArea: (
@@ -80,8 +126,8 @@ export function DashboardLayout({
           {/** @slot Searchbar */}
           <Searchbar />
 
-          {/** @slot Theme toggle */}
-          <ThemeToggle />
+          {/** @slot Theme controls (mode slider + palette button) */}
+          <ThemeControls />
 
           {/** @slot Language popover */}
           <LanguagePopover data={_langs} />

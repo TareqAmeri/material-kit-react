@@ -109,9 +109,9 @@ export const background = {
     neutral: grey[200],
   }),
   dark: createPaletteChannel({
-    paper: grey[800],
-    default: grey[900],
-    neutral: grey[700],
+    paper: '#0a1929',
+    default: '#001e3c',
+    neutral: '#0d2847',
   }),
 };
 
