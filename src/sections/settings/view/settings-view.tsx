@@ -154,8 +154,50 @@ export function SettingsView() {
     if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64String = reader.result as string;
-        setLogoPreview(base64String);
+        const img = new Image();
+        img.onload = () => {
+          // Create canvas to compress image
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          // Max dimensions for logo (to keep file size reasonable)
+          const maxWidth = 400;
+          const maxHeight = 400;
+          
+          let { width, height } = img;
+          
+          // Calculate new dimensions maintaining aspect ratio
+          if (width > height) {
+            if (width > maxWidth) {
+              height = (height * maxWidth) / width;
+              width = maxWidth;
+            }
+          } else if (height > maxHeight) {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          
+          // Draw and compress
+          ctx?.drawImage(img, 0, 0, width, height);
+          
+          // Convert to base64 with compression (0.8 quality for JPEG)
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
+          
+          // Check size (localStorage limit is ~5MB, we'll limit to 2MB to be safe)
+          const sizeInBytes = (compressedBase64.length * 3) / 4;
+          const sizeInMB = sizeInBytes / (1024 * 1024);
+          
+          if (sizeInMB > 2) {
+            window.alert('Image is too large. Please use a smaller image (max 2MB after compression).');
+            return;
+          }
+          
+          setLogoPreview(compressedBase64);
+        };
+        img.src = reader.result as string;
       };
       reader.readAsDataURL(file);
     }
@@ -166,12 +208,21 @@ export function SettingsView() {
   };
 
   const handleSaveBranding = useCallback(() => {
-    if (logoPreview) {
-      localStorage.setItem(STORAGE_KEY_LOGO, logoPreview);
+    try {
+      if (logoPreview) {
+        localStorage.setItem(STORAGE_KEY_LOGO, logoPreview);
+      }
+      localStorage.setItem(STORAGE_KEY_SYSTEM_NAME, systemName);
+      window.dispatchEvent(new Event('branding-updated'));
+      window.alert('Branding saved successfully!');
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'QuotaExceededError') {
+        window.alert('Failed to save branding: Storage quota exceeded. Please use a smaller logo image.');
+      } else {
+        window.alert('Failed to save branding. Please try again.');
+      }
+      console.error('Error saving branding:', error);
     }
-    localStorage.setItem(STORAGE_KEY_SYSTEM_NAME, systemName);
-    window.dispatchEvent(new Event('branding-updated'));
-    window.alert('Branding saved successfully!');
   }, [logoPreview, systemName]);
 
   const handleResetBranding = useCallback(() => {
@@ -436,7 +487,9 @@ export function SettingsView() {
                   </Button>
                 </label>
                 <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
-                  Recommended: Square image (PNG or SVG) with transparent background
+                  Recommended: Square image (PNG, JPG, or SVG) with transparent background.
+                  <br />
+                  Images will be automatically compressed and resized to 400x400px max.
                 </Typography>
               </Box>
 
