@@ -1,8 +1,9 @@
 import type { LinkProps } from '@mui/material/Link';
 
-import { useId } from 'react';
+import { useId, useState, useEffect } from 'react';
 import { mergeClasses } from 'minimal-shared/utils';
 
+import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import { styled, useTheme } from '@mui/material/styles';
 
@@ -28,6 +29,21 @@ export function Logo({
   const theme = useTheme();
 
   const gradientId = useId();
+  
+  const [brandingLogo, setBrandingLogo] = useState<string>('');
+
+  useEffect(() => {
+    const loadBrandingLogo = () => {
+      const savedLogo = localStorage.getItem('dmo-system-logo');
+      if (savedLogo) {
+        setBrandingLogo(savedLogo);
+      }
+    };
+
+    loadBrandingLogo();
+    window.addEventListener('branding-updated', loadBrandingLogo);
+    return () => window.removeEventListener('branding-updated', loadBrandingLogo);
+  }, []);
 
   const TEXT_PRIMARY = theme.vars.palette.text.primary;
   const PRIMARY_LIGHT = theme.vars.palette.primary.light;
@@ -163,6 +179,40 @@ export function Logo({
       />
     </svg>
   );
+
+  // If branding logo exists, use it instead of default SVG logo
+  if (brandingLogo) {
+    return (
+      <LogoRoot
+        component={RouterLink}
+        href={href}
+        aria-label="Logo"
+        underline="none"
+        className={mergeClasses([logoClasses.root, className])}
+        sx={[
+          {
+            width: 40,
+            height: 40,
+            ...(!isSingle && { width: 102, height: 36 }),
+            ...(disabled && { pointerEvents: 'none' }),
+          },
+          ...(Array.isArray(sx) ? sx : [sx]),
+        ]}
+        {...other}
+      >
+        <Box
+          component="img"
+          src={brandingLogo}
+          alt="System Logo"
+          sx={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+          }}
+        />
+      </LogoRoot>
+    );
+  }
 
   return (
     <LogoRoot
